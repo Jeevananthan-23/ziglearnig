@@ -1,0 +1,6 @@
+/.vscode
+*.exe
+*.o
+*/zig-cache
+*/zig-out
+/zig-kqasyncio/iofthetiger
