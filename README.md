@@ -17,16 +17,17 @@ Repo for learning and ziglang
            ❯ select method, avg(cast(time as double)) ||'s' as avg_time,  CASE
               WHEN AVG(throughput) >= POWER(1024, 3) THEN ROUND(AVG(throughput) / POWER(1024, 3), 2) || ' GiB'
               WHEN AVG(throughput) >= POWER(1024, 2) THEN ROUND(AVG(throughput) / POWER(1024, 2), 2) || ' MiB'
-        WHEN AVG(throughput) >= 1024 THEN ROUND(AVG(throughput) / 1024, 2) || ' KiB'
-        ELSE ROUND(AVG(throughput), 2) || ' B'  END || '/s' as avg_throughput
-        from '/home/jeeva/zig.csv' Group by method order by avg_time  asc;
-         +---------------------+-------------+----------------+
-           | method              | avg_time    | avg_throughput |
-           +---------------------+-------------+----------------+
-           | blocking            | 0.07809158s | 1.31 GiB/s     |
-          | iouring_128_entries | 0.0858811s  | 1.14 GiB/s     |
-           | iouring_1_entries   | 1.54154491s | 66.67 MiB/s    |
-           +---------------------+-------------+----------------+
-          3 rows in set. Query took 0.140 seconds.
+              WHEN AVG(throughput) >= 1024 THEN ROUND(AVG(throughput) / 1024, 2) || ' KiB'
+              ELSE ROUND(AVG(throughput), 2) || ' B' 
+            END || '/s' as avg_throughput
+            from 'zig.csv' Group by method order by avg_time  asc;
+        +---------------------+-------------+----------------+
+        | method              | avg_time    | avg_throughput |
+        +---------------------+-------------+----------------+
+        | blocking            | 0.07809158s | 1.31 GiB/s     |
+        | iouring_128_entries | 0.0858811s  | 1.14 GiB/s     |
+        | iouring_1_entries   | 1.54154491s | 66.67 MiB/s    |
+        +---------------------+-------------+----------------+
+        3 rows in set. Query took 0.008 seconds.
           ```
   - [networkio.zig](https://github.com/Jeevananthan-23/ziglearnig/blob/main/zig-kqasyncio/networkio.zig)

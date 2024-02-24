@@ -1,4 +1,6 @@
 const std = @import("std");
+const IO = @import("iofthetiger").IO;
+
 
 const OUT_FILE = "out.bin";
 const BUFFER_SIZE: u64 = 4096;
@@ -118,6 +120,10 @@ pub fn main() !void {
     var data = try readNBytes(allocator, "/dev/random", SIZE);
     defer allocator.free(data);
 
+     // Cross-platform IO setup.
+    var io = try IO.init(128, 0);
+    defer io.deinit();
+    
     const RUNS = 10;
     var run: usize = 0;
     while (run < RUNS) : (run += 1) {

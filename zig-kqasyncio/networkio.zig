@@ -16,7 +16,7 @@ pub fn main() !void {
     const flags = 0;
     var ring = try linux.IO_Uring.init(entries, flags);
     defer ring.deinit();
-
+    
     var server: Socket = undefined;
     server.handle = try os.socket(os.AF.INET, os.SOCK.STREAM, os.IPPROTO.TCP);
     defer os.closeSocket(server.handle);
@@ -54,7 +54,7 @@ pub fn main() !void {
                     client.handle = @as(os.socket_t, @intCast(cqe.res));
                     client.state = .recv;
                     _ = try ring.recv(@intFromPtr(client), client.handle, .{ .buffer = &client.buffer }, 0);
-                    log.debug("{}: Received {s} bytes from {}", .{ client.state, &client.buffer.len, client.handle });
+                    log.debug("{}: Received {s} bytes from {}", .{ client.state, &client.buffer, client.handle });
                     _ = try ring.accept(@intFromPtr(&server), server.handle, &addr.any, &addr_len, 0);
                 },
                 .recv => {

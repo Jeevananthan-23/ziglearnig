@@ -33,6 +33,12 @@ fn ConcurrentStack(comptime T: type) type {
             var head = self.head;
             node.next = head;
             self.head = node;
+
+             while (@atomicRmw(bool, &self.lock, .Xchg, true, .SeqCst)) {}
+                defer assert(@atomicRmw(bool, &self.lock, .Xchg, false, .SeqCst));
+
+                node.next = self.root;
+                self.root = node;
         }
 
         pub fn pop(self: *Self) ?T {
